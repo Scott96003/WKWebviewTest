@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>in-app Browser 功能測試</title>
+        <meta name="description" content="本頁為 你知道你的網站可能在 InAppBrowser/webview 無法使用嗎? &#8211; 要改的地方太多了，那就改天吧 範例測試頁">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script>
+        <script>
+                function test_confirm(){
+                    if (confirm('confirm 確認視窗功能測試')) {
+                        $('#isConfirm').text('按了確定');
+                    }
+                    else {
+                        $('#isConfirm').text('按了取消');
+                    }
+                }
+        </script>
+        <style>
+            body{padding-bottom: 80px;}
+            h1{padding:10px}
+            .row>div{margin-bottom: 15px}
+            .card{margin-top:10px;height:100%}
+            .btn{margin-bottom: 5px}
+            .btn-fullscreen-exit{position: fixed;bottom:10%;left:50%;transform: translateX(-50%)}
+            .col-form-label{font-size: 11px;}
+            .btn-share-line, .btn-share-fb{position: fixed;width:50%;bottom:0;padding: 10px;text-align: center}
+            .btn-share-line:hover, .btn-share-fb:hover{color:#fff;text-decoration: none;opacity: .9;}
+            .btn-share-fb{background: #4367b2;color:#fff;left:0;}
+            .btn-share-line{background: #00b900;color:#fff;right:0;}
+        </style>
+        <link rel="manifest" href="manifest.json" />
+        <link rel="icon" type="image/png" href="favicon.png" />
+        <link href="favicon.png" rel="shortcut icon" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="favicon.png">    
+    </head>
+    <body>
+        <div class="alert alert-info">
+            本頁為 <a href="https://blog.user.today/inapp-browser-webview-problem/">你知道你的網站可能在 InAppBrowser/webview 無法使用嗎? &#8211; 要改的地方太多了，那就改天吧</a> 範例測試頁。
+        </div>
+        <div class="container">
+            <div class="row">
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">Alert() 功能測試</h4>
+                              <p class="card-text">有些 in-app Browser 點擊下方按鈕後，不會跳出 hey</p>
+                              <a href="#" class="btn btn-primary" onclick="alert('hey')">點擊測試</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">confirm() 功能測試</h4>
+                              <p class="card-text">有些 in-app Browser 點擊下方按鈕後，不會跳出確認視窗</p>
+                              <a href="#" class="btn btn-primary" onclick="test_confirm()">點擊測試</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                返回值：<span id="isConfirm">尚未點擊</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">Facebook 分享視窗測試</h4>
+                              <p class="card-text">
+                                使用 in-app Browser 瀏覽器，可能碰到以下狀況:
+                                <ul>
+                                    <li>按取消，仍會得到分享成功。</li>
+                                    <li>成功分享後，可能會卡在一個白畫面，無法回到網頁。</li>
+                                </ul>
+                              </p>
+                              <a href="#" class="btn btn-primary" onclick="test_share()">點擊測試</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <span id="fb_respone2">尚未點擊</span>，<span id="fb_respone"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <img class="card-img-top" src="287.jpg" alt="Card image cap">
+                            <div class="card-body">
+                              <h4 class="card-title">儲存圖片功能測試</h4>
+                              <p class="card-text">有些 in-app Browser 長按圖片時，不會跳出下載功能。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                            <h4 class="card-title">window.open</h4>
+                            <p class="card-text">有些 in-app Browser 無法開啟彈跳視窗。</p>
+                            <a href="javascript:void(0)" class="btn btn-primary" onclick="window.open('http://www.google.com', 'popup', 'width=' + window.innerWidth + ',height=' + window.innerHeight + ',scrollbars=no');">開啟一個有 Google 的彈跳視窗</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">target="_blank" 開新視窗與原視窗控制</h4>
+                                <p class="card-text">用 target="_blank" 開新視窗時，使用 window.opener 修改原視窗內容。此功能可能會被瀏覽器視為安全漏洞而無法使用。</p>
+                                <a href="https://www.google.com" class="btn btn-primary btn-open-blank-link" target="_blank">用新視窗開啟 Google</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div id="blankstat">尚未點擊用新視窗開啟 Google</div>                          
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                <h4 class="card-title">跨視窗控制</h4>
+                                <p class="card-text">有些 in-app Browser 無法開啟彈跳視窗，也無法正常進行各項操作。</p>
+                                先按下方鈕開啟空白彈跳視窗，且不要關閉<br>
+                                <a href="javascript:void(0)" class="btn btn-primary" onclick="op()">開啟空白彈跳視窗</a>
+                                <br>
+                                <br>
+                                再按以下按鈕，控制剛剛開啟的彈跳視窗<br>
+                                <input class="btn btn-primary" type="button" value="最小化空白彈跳視窗" onclick="if(win&&win.open&&!win.closed){win.resizeTo(0,0);win.moveTo(0,window.screen.width);}else alert('找不到視窗')">
+                                <input class="btn btn-primary" type="button" value="最大化空白彈跳視窗" onclick="if(win&&win.open&&!win.closed){win.moveTo(-4,-4);win.resizeTo(screen.availWidth+8,screen.availHeight+8);}else alert('找不到視窗');">
+                                <input class="btn btn-primary" type=button value="關閉空白彈跳視窗" onclick="if(win&&win.open&&!win.closed){win.opener=null;win.close()}else alert('找不到視窗')">
+                                <input class="btn btn-primary" type=button value="空白彈跳視窗重新整理" onclick="if(win&&win.open&&!win.closed){win.location.reload();win.focus()}else alert('找不到視窗')">
+                                <input class="btn btn-primary" type="button" value="看空白彈跳視窗的大小" onclick="if(win&&win.open&&!win.closed){alert(win.document.body.clientWidth+'*'+win.document.body.clientHeight);win.focus();}else{alert('找不到視窗')};">
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">Facebook Login API 測試</h4>
+                              <p class="card-text">
+                                有些 in-app Browser 瀏覽器，按下同意授權後，卡在一個白畫面，無法回到原來的網頁。或是無法傳回任何值。
+                              </p>
+                              <div id="fb-root"></div>
+                              <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+                              
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div id="fblogin_status">尚未點擊 FB 登入按鈕</div>                          
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">HTML5 Geolocation API</h4>
+                              <p class="card-text">
+                                有些 in-app Browser 瀏覽器，按下同意授權位置訊息後，程式卻無法正常接收經緯度。
+                              </p>          
+                              <a href="javascript:void(0)" class="btn btn-primary" onclick="getgps()">測試取得 GPS 位置</a>                    
+                              <div id="map-preview"></div> 
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div id="geomsg" style="display:none">擷取地理資訊中…</div>                                                                 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">列印測試</h4>
+                              <p class="card-text">
+                                有些 in-app Browser 瀏覽器，按下列印之後，不會跳出預覽列印視窗。
+                              </p>          
+                              <a href="javascript:void(0)" class="btn btn-primary" onclick="window.print()">列印</a>                    
+                            </div>
+                            <div class="card-footer text-muted">
+                                typeof(window.print) === 'function':<span id="printmsg"></span>                                                                 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">File input 檔案選擇測試</h4>
+                              <p class="card-text">
+                                有些 in-app Browser 瀏覽器，按了瀏覽檔案之後，畫面毫無反應。
+                              </p>
+                              一般型<input type="file">   
+                              <br>
+                              <br>
+                              只能上傳圖片<input type="file" accept="image/*">         
+                              <br>
+                              <br>
+                              只能上傳圖片，呼叫照相機<input type="file" accept="image/*" capture>                        
+                            </div> 
+                            <div class="card-footer text-muted">
+                                檔案名稱:<span id="filename">尚未選擇</span>                                                                 
+                            </div>                           
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">PWA 模式測試</h4>
+                              <p class="card-text">
+                                若同時滿足以下條件：<br>
+                                <ul>
+                                    <li>網頁有 HTTPS</li>
+                                    <li>開發者為網頁加入 manifest.json 設定檔</li>
+                                    <li>使用者使用 iOS 11.3+ 的 Safari 或 Android 的 Google Chrome 40+</li>
+                                    <li>使用者將網頁加入到主畫面（釘選至桌面），並從這個桌面捷徑開啟網頁</li>
+                                </ul>
+                                將導致網頁可能用一種無瀏覽器工具列的 web app 模式開啟。<br>
+                                本頁所提問題同樣有可能出現在 PWA 偽網頁 app 模式中。
+                              </p>                                                   
+                            </div> 
+                            <div class="card-footer text-muted">
+                                <span id="isPWA">無法檢測</span>                                                                 
+                            </div>                           
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">HTML5 Fullscreen API</h4>
+                              <p class="card-text">
+                                有些 in-app Browser 瀏覽器，無法使用 HTML5 Fullscreen API 讓網頁全螢幕。
+                              </p>          
+                              <a href="javascript:void(0)" onclick="fullscreen($(this))" class="btn btn-primary btn-fullscreen"><span class="glyphicon glyphicon-resize-full"></span>全螢幕</a>                        
+                              <a href="javascript:void(0)" onclick="fullscreen_exit($(this))" class="btn btn-warning btn-fullscreen-exit" style="display: none;"><span class="glyphicon glyphicon-resize-small"></span>離開全螢幕</a>                                       
+                            </div> 
+                            <div class="card-footer text-muted">
+                                <span id="isiOS">iOS 無法使用本功能</span>                                                                 
+                            </div>                           
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title">input autocomplete test</h4>
+                              <p class="card-text">
+                                有些 in-app Browser 使用版本很舊的瀏覽器引擎，填寫 email 時，自動完成功能也可以直接填入瀏覽器已記錄的信用卡資訊。
+                              </p>          
+                              <!-- https://developers.google.com/web/updates/2015/06/checkout-faster-with-autofill -->
+                              <div class="form-group row">
+                                    <label for="frmEmailA" class="col-sm-3 col-form-label">Email</label>
+                                    <div class="col-sm-9"><input type="email" name="email" id="frmEmailA" class="form-control" placeholder="name@example.com" required autocomplete="email"></div>
+
+                                    <label class="col-sm-3 col-form-label" for="frmPhoneNumA">Phone</label>
+                                    <div class="col-sm-9"><input type="tel" name="phone" id="frmPhoneNumA" class="form-control" placeholder="+1-650-450-1212" required autocomplete="tel"></div>
+
+                                    <label class="col-sm-3 col-form-label" for="frmAddressS">Address</label>
+                                    <div class="col-sm-9"><input name="ship-address" required id="frmAddressS" class="form-control" placeholder="123 Any Street" autocomplete="shipping street-address"></div>
+                              
+                                    <label class="col-sm-3 col-form-label" for="frmCityS">City</label>
+                                    <div class="col-sm-9"><input name="ship-city" required id="frmCityS" class="form-control" placeholder="New York" autocomplete="shipping locality"></div>
+
+                                    <label class="col-sm-3 col-form-label" for="frmStateS">State</label>
+                                    <div class="col-sm-9"><input name="ship-state" required id="frmStateS" class="form-control" placeholder="NY" autocomplete="shipping region"></div>
+
+                                    <label class="col-sm-3 col-form-label" for="frmZipS">Zip</label>
+                                    <div class="col-sm-9"><input name="ship-zip" required id="frmZipS" class="form-control" placeholder="10011" autocomplete="shipping postal-code"></div>
+
+                                    <label class="col-sm-3 col-form-label" for="frmCountryS">Country</label>
+                                    <div class="col-sm-9"><input name="ship-country" required id="frmCountryS" class="form-control" placeholder="USA" autocomplete="shipping country"></div>
+
+                                    <label class="col-sm-3 col-form-label" for="frmCCNum">Card Number</label>
+                                    <div class="col-sm-9"><input name="cardnumber" id="frmCCNum" required class="form-control" autocomplete="cc-number"></div>
+                                    
+                                    <label class="col-sm-3 col-form-label" for="frmCCCVC">CVC</label>
+                                    <div class="col-sm-9"><input name="cvc" id="frmCCCVC" required class="form-control" autocomplete="cc-csc"></div>
+                                    
+                                    <label class="col-sm-3 col-form-label" for="frmCCExp">Expiry</label>
+                                    <div class="col-sm-9"><input name="cc-exp" id="frmCCExp" required class="form-control" placeholder="MM-YYYY" autocomplete="cc-exp"></div>                             
+                                </div>
+                            </div>                                                      
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div id="ua" class="alert alert-warning"></div>
+        </div>
+
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://jiimmysu.github.io/in-app-browser-test/" class="btn-share-fb" target="_blank">分享到 Facebook</a>
+        <a href="https://social-plugins.line.me/lineit/share?url=https://jiimmysu.github.io/in-app-browser-test/" class="btn-share-line" target="_blank">分享到 Line</a>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+        <script>
+            // FB 初始化
+            window.fbAsyncInit = function () {
+               FB.init({
+                   appId: '111081892978740',
+                   xfbml: true,
+                   cookie: true,
+                   version: 'v3.0'
+               });
+               FB.AppEvents.logPageView();
+            };
+
+            (function (d, s, id) {
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) { return; }
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/zh_TW/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            // FB 分享
+            function test_share() {
+               FB.ui(
+                     {
+                         method: 'share',
+                         mobile_iframe: true,
+                         href: 'https://www.google.com',
+                     },
+                     function (response) {
+                         $('#fb_respone').text('返回值 response:'+response+'\n response.error_message:'+response.error_message+'\n id:'+response.post_id)
+                         if (response && !response.error_message) {
+                            $('#fb_respone2').text('分享結果：成功分享')
+                         } else {
+                            $('#fb_respone2').text('分享結果：分享失敗')
+                         }
+                     }
+               );
+            }
+
+            // 開彈跳視窗
+            var win=null;
+            function op(){
+                win=window.open("about:blank","win","width=200,height=200");
+                win.document.write("<input type='button' value='關閉此彈跳視窗' onclick='window.close()'>");
+                win.document.write("<input type='button' value='刷新父窗口' onclick='window.opener.location.reload()'>");
+            }
+
+            $('.btn-open-blank-link').on('click', function(){
+                console.log()
+                if (window.opener) {
+                    window.opener.document.getElementById('blankstat').innerHTML('已點選開新視窗')
+                    window.opener.location = "https://www.webhek.com";
+                }
+                else{
+                    $('#blankstat').text('此功能無法使用，window.opener＝'+window.opener)
+                }
+            })
+            
+
+            // FB登入 (官方範例)
+            function statusChangeCallback(response) {
+                console.log('statusChangeCallback');
+                console.log(response);
+                if (response.status === 'connected') {
+                    testAPI();
+                } else {
+                    document.getElementById('fblogin_status').innerHTML = 'Please log ' + 'into this app.';
+                }
+            }
+            
+            function checkLoginState() {
+                FB.getLoginStatus(function (response) {
+                    statusChangeCallback(response);
+                });
+            }
+
+            function testAPI() {
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function (response) {
+                    console.log('Successful login for: ' + response.name);
+                    document.getElementById('fblogin_status').innerHTML =
+                    'Thanks for logging in, ' + response.name + '!';
+                });
+            }
+
+            // 簡易偵測
+            $('#ua').text(navigator.userAgent);
+            if (/Mobi/.test(navigator.userAgent)) {
+                if (/Line/.test(navigator.userAgent)||/FBAV/.test(navigator.userAgent)||/FBIOS/.test(navigator.userAgent)){
+                    $('body').prepend('<h1>看起來你正在使用 in-app browser 呢!</h1>')
+                }
+            }
+
+            // 地理資訊
+            function getgps(){
+                $('#geomsg').fadeIn();
+                if (!navigator.geolocation) {
+                    $('#geomsg').append("<p>取得位置失敗，您的網頁瀏覽器無法使用此功能，建議使用 Safari 或 Google Chrome</p>");        
+                }
+                function success(position) {
+                    if (/Mobi/.test(navigator.userAgent) || /Andr/.test(navigator.userAgent)) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;                        
+                        var accuracy = position.coords.accuracy;                        
+                        var geomsg = "<br><span class='glyphicon glyphicon-ok'></span> 能成功取得您的位置";                                                
+
+                        $('#geomsg').html(geomsg);
+                        $('#map-preview').append('目前大概位置預覽:<img style="pointer-events: none;" class="img-fluid" src= "https://maps.googleapis.com/maps/api/staticmap?zoom=18&size=400x400&center='+ latitude + ',' + longitude + '&maptype=roadmap&markers=color:red%7Clabel:S%7C'+ latitude + ',' + longitude +'"><br>緯度:'+ latitude +'<br>經度'+ longitude +'<br>準確度(accuracy):'+ accuracy +'');
+                        //$('#map-preview').append('位置預覽:<img class="img-responsive" src= "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=400x400&center='+ latitude + ',' + longitude + '&maptype=roadmap&markers=color:red%7Clabel:S%7C'+ latitude + ',' + longitude +'">');
+                        if (accuracy > 500) {
+                            $('#geomsg').append('<p>您的地理位置誤差過大，建議重新開啟裝置的 GPS 定位或網路並重新整理。</p>');
+                        }                        
+                    }
+                    else {
+                        $('#geomsg').append('<p>位置取得失敗，<br>請使用行動裝置(智慧型手機/平板)操作。</p>');
+                    }                    
+                }
+                                 
+
+                function error() {
+                    geomsg = "<br>無法取得您的位置。<ol><li>請選擇「允許」網頁取用位置，</li><li>檢查 WiFi/3G/4G 數據連線是否開啟並正常連線</li><li>檢查手機通知中心中的 GPS 定位是否已開啟</li><li>換一個看得到天空或是收訊良好的位置</li><li>系統設定內的定位服務請設為開啟(<a href='https://support.apple.com/zh-tw/HT207092' target='_blank'>iPhone 設定步驟</a>/<a href='https://support.google.com/accounts/answer/3467281?hl=zh-Hant' target='_blank'>Android 設定步驟</a>)</li></ol>";
+                    $('#geomsg').html(geomsg);
+                }
+
+                geomsg = "<p>擷取地理資訊中…</p>";
+                var geo_options = {
+                    enableHighAccuracy: true,
+                    maxmumAge: 60000,
+                    timeout: 10000
+                };
+                navigator.geolocation.getCurrentPosition(success, error, geo_options);      
+            }
+            
+            // 檔案上傳
+            $('input[type=file]').change(function() {
+                var filename = $(this).val();
+                $('#filename').html(filename);
+            });
+
+            // 列印            
+            $('#printmsg').text(typeof(window.print) === 'function')
+
+            // pwa
+            window.matchMedia('(display-mode: standalone)').matches ? $('#isPWA').html('PWA模式') : $('#isPWA').html('非 PWA 模式');
+
+            // full scren
+            //v3.3.3 https://github.com/sindresorhus/screenfull.js/
+            (function(){'use strict';var document=typeof window!=='undefined'&&typeof window.document!=='undefined'?window.document:{};var isCommonjs=typeof module!=='undefined'&&module.exports;var keyboardAllowed=typeof Element!=='undefined'&&'ALLOW_KEYBOARD_INPUT'in Element;var fn=(function(){var val;var fnMap=[['requestFullscreen','exitFullscreen','fullscreenElement','fullscreenEnabled','fullscreenchange','fullscreenerror'],['webkitRequestFullscreen','webkitExitFullscreen','webkitFullscreenElement','webkitFullscreenEnabled','webkitfullscreenchange','webkitfullscreenerror'],['webkitRequestFullScreen','webkitCancelFullScreen','webkitCurrentFullScreenElement','webkitCancelFullScreen','webkitfullscreenchange','webkitfullscreenerror'],['mozRequestFullScreen','mozCancelFullScreen','mozFullScreenElement','mozFullScreenEnabled','mozfullscreenchange','mozfullscreenerror'],['msRequestFullscreen','msExitFullscreen','msFullscreenElement','msFullscreenEnabled','MSFullscreenChange','MSFullscreenError']];var i=0;var l=fnMap.length;var ret={};for(;i<l;i++){val=fnMap[i];if(val&&val[1]in document){for(i=0;i<val.length;i++){ret[fnMap[0][i]]=val[i];}
+return ret;}}
+return false;})();var eventNameMap={change:fn.fullscreenchange,error:fn.fullscreenerror};var screenfull={request:function(elem){var request=fn.requestFullscreen;elem=elem||document.documentElement;if(/ Version\/5\.1(?:\.\d+)? Safari\//.test(navigator.userAgent)){elem[request]();}else{elem[request](keyboardAllowed?Element.ALLOW_KEYBOARD_INPUT:{});}},exit:function(){document[fn.exitFullscreen]();},toggle:function(elem){if(this.isFullscreen){this.exit();}else{this.request(elem);}},onchange:function(callback){this.on('change',callback);},onerror:function(callback){this.on('error',callback);},on:function(event,callback){var eventName=eventNameMap[event];if(eventName){document.addEventListener(eventName,callback,false);}},off:function(event,callback){var eventName=eventNameMap[event];if(eventName){document.removeEventListener(eventName,callback,false);}},raw:fn};if(!fn){if(isCommonjs){module.exports=false;}else{window.screenfull=false;}
+return;}
+Object.defineProperties(screenfull,{isFullscreen:{get:function(){return Boolean(document[fn.fullscreenElement]);}},element:{enumerable:true,get:function(){return document[fn.fullscreenElement];}},enabled:{enumerable:true,get:function(){return Boolean(document[fn.fullscreenEnabled]);}}});if(isCommonjs){module.exports=screenfull;}else{window.screenfull=screenfull;}})();
+
+
+            function fullscreen(){
+                $('.btn-fullscreen').hide();
+                $('.btn-fullscreen-exit').show();
+                screenfull.request(document.querySelector('body'));     
+            }        
+
+            function fullscreen_exit(){
+                $('.btn-fullscreen').show();
+                $('.btn-fullscreen-exit').hide();
+                screenfull.exit();                           
+            }
+
+            
+        </script>
+    </body>
+</html>
